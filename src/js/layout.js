@@ -1,43 +1,30 @@
-import React, { useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ScrollToTop from "./component/scrollToTop";
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.css';
+import '../styles/index.css';
+import Layout from './layout.js';
+import characters from './views/characters'; 
+import charactersDetails from './views/charactersDetails';
+import planets from './views/planets';
+import planetsDetails from './views/planetsDetails'; 
+import vehicles from './views/vehicles';
+import vehiclesDetails from './views/vehiclesDetails';
+const root = createRoot(document.querySelector('#app'));
 
-import Home from "./views/home";
-import injectContext from "./store/appContext";
-
-import  Navbar  from "./component/navbar";
-import  Footer  from "./component/footer";
-import People from "./views/people";
-import Planets from "./views/planets";
-
-
-const Layout = () => {
-
-
-	const basename = process.env.BASENAME || "";
-
-	return (
-		<div>
-			<BrowserRouter basename={basename}>
-				<ScrollToTop>
-					<Navbar />
-					<Routes>
-						<Route path="/" element={<Home />} />
-						<Route path="/People" element={<People />} />
-						<Route path="/Planets" element={<Planets />} />
-						<Route path="*" element={<h1>Not found!</h1>} />
-					</Routes>
-					<Footer />
-				</ScrollToTop>
-			</BrowserRouter>
-		</div>
-	);
-};
-
-export default injectContext(Layout);
-
-
-
+root.render(
+  <Router>
+    <Layout />
+    <Switch>
+      <Route exact path="/" component={characters} />
+      <Route path="/details/characters/:id" component={charactersDetails} />
+      <Route exact path="/" component={planets} />
+      <Route path="/details/planets/:id" component={planetsDetails} />
+      <Route exact path="/" component={vehicles} />
+      <Route path="/details/vehicles/:id" component={vehiclesDetails}/>
+    </Switch>
+  </Router>
+);
 
 
 

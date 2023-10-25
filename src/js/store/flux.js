@@ -2,13 +2,13 @@ const getState = ({ getStore, getActions, setStore }) => {
     const baseUrl = 'https://swapi.dev/api'
     return {
         store: {
-            people: [],
+            characters: [],
             vehicles: [],
             planets: [],
-            peoplePage: 1,
-            peopleNextPage: '',
-            peoplePreviousPage: '',
-            totalPeoplePages: 1,
+            charactersPage: 1,
+            charactersNextPage: '',
+            charactersPreviousPage: '',
+            totalCharactersPages: 1,
             vehiclesPage: 1,
             vehiclesNextPage: '',
             vehiclesPreviousPage: '',
@@ -21,10 +21,10 @@ const getState = ({ getStore, getActions, setStore }) => {
             details: []
         },
         actions: {
-            getPeople: () => {
-                fetch(`${baseUrl}/people`)
+            getCharacters: () => {
+                fetch(`${baseUrl}/characters`)
                 .then(data => data.json())
-                .then(res => setStore({ people: res.results, peopleNextPage: res.next, peoplePreviousPage: res.previous, totalPeoplePages: Math.floor(res.count / 10 + 1 )}))
+                .then(res => setStore({ characters: res.results, charactersNextPage: res.next, charactersPreviousPage: res.previous, totalCharactersPages: Math.floor(res.count / 10 + 1 )}))
             },
             getVehicles: () => {
                 console.log(`${baseUrl}/vehicles/?page=${getStore().vehiclesPage}`)
@@ -52,20 +52,20 @@ const getState = ({ getStore, getActions, setStore }) => {
                 .then(data => data.json())
                 .then(res => setStore({ vehicles: res.results, vehiclesNextPage: res.next, vehiclesPreviousPage: res.previous}))
             },
-            nextPeoplePage: () => {
-                fetch(getStore().peopleNextPage)
+            nextCharactersPage: () => {
+                fetch(getStore().charactersNextPage)
                 .then(data => data.json())
-                .then(res => setStore({ people: res.results, peopleNextPage: res.next, peoplePreviousPage: res.previous}))
+                .then(res => setStore({ characters: res.results, charactersNextPage: res.next, charactersPreviousPage: res.previous}))
             },
-            previousPeoplePage: () => {
-                fetch(getStore().peoplePreviousPage)
+            previousCharactersPage: () => {
+                fetch(getStore().charactersPreviousPage)
                 .then(data => data.json())
-                .then(res => setStore({ people: res.results, peopleNextPage: res.next, peoplePreviousPage: res.previous}))
+                .then(res => setStore({ characters: res.results, charactersNextPage: res.next, charactersPreviousPage: res.previous}))
             },
-            setPeoplePage: (page)=> {
-                fetch(`${baseUrl}/people/?page=${page}`)
+            setCharactersPage: (page)=> {
+                fetch(`${baseUrl}/characters/?page=${page}`)
                 .then(data => data.json())
-                .then(res => setStore({ people: res.results, peopleNextPage: res.next, peoplePreviousPage: res.previous}))
+                .then(res => setStore({ characters: res.results, charactersNextPage: res.next, charactersPreviousPage: res.previous}))
             },
             nextPlanetsPage: () => {
                 fetch(getStore().planetsNextPage)
@@ -88,10 +88,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 .then(res => setStore({ details: res }))
             },
 
-            // getImage: (type, name) => {
-            //     console.log('type: ', type, 'name: ', name)
-            //     setStore({ imageUrl: `https://starwars-aws.s3.amazonaws.com/img/${type}/${name}.jpg`})
-            // },
+           
             addToFavorites: (name, url) => {
                 let newObj = { name: name, url: url}
                 setStore({favorites: getStore().favorites.concat(newObj)})

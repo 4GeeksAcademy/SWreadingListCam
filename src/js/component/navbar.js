@@ -18,7 +18,17 @@ const Navbar = () => {
     }) 
 
     return (
-        <nav className="nav nav-masthead justify-content-center float-md-end">
+
+        <nav class="navbar bg-body-tertiary">
+        <div class="container"> 
+          <a class="navbar-brand" href="#">
+            <img src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="Bootstrap" width="30" height="24"/>
+          </a>
+        </div>
+ 
+
+      
+
           
               <Link className="nav-link text-white" to="/">Home</Link>
             
@@ -30,7 +40,8 @@ const Navbar = () => {
             
             <div className="dropdown">
                 <button className="d-flex flex-row justify-content-between align-items-center btn btn-secondary dropdown-toggle nav-favs" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-                    Favorites <div className="mx-2 px-2 bg-dark rounded">{store.favorites.length}</div>
+                    Favorites 
+                    <div className="mx-2 px-2 bg-dark rounded">{store.favorites.length}</div>
                 </button>
 
                 <ul className="mt-0 border border-2 px-3 dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
