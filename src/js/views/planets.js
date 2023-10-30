@@ -1,40 +1,49 @@
-import React, {useContext} from "react"
+import React, { useContext } from "react"
 import { Link } from "react-router-dom"
 import { Context } from "../store/appContext"
 
 const Planets = () => {
-    const {store, actions} = useContext(Context)
-    
-    
+    const { store, actions } = useContext(Context)
+    const getId = (myUrl) => {
+
+        const lastslash = myUrl.lastIndexOf('/')
+
+        const newUrl = myUrl.substring(0, lastslash)
+
+        return newUrl.substring(newUrl.lastIndexOf('/') + 1, newUrl.length)
+
+    }
+
     const planets = store.planets.map(planet => {
         return (
-            
-                <div key={planet.name} className="card text-white bg-dark border border-5 border-light rounded mb-4 me-3 col-4">
-                    <div className="card-body">
-                        <div className="px-2 py-1 bg-secondary inside-borders-vehicle">
-                            <h5 className="text-start card-title mb-1 text-black text-truncate">{planet.name}</h5>
-                        </div>
-                        <img src={`https://starwars-aws.s3.amazonaws.com/img/planets/${planet.name}.jpg`} className="card-img-top rounded mx-auto d-block display-image inside-borders-vehicle mt-3 mb-1" alt="..." />
-                        <p className="text-start text-black bg-secondary px-2 mx-0 mb-1 inside-borders-vehicle card-class"></p>
-                        <div className="card-text text-black card-body-font-size inside-borders-vehicle px-3 py-2">
-                            <dl className="row">
+
+            <div key={planet.name} className="card text-white bg-dark border border-5 border-light rounded mb-4 me-3 col-4">
+                <div className="card-body">
+                    <div className="px-2 py-1 bg-secondary inside-borders-vehicle">
+                        <h5 className="text-start card-title mb-1 text-black text-truncate">{planet.name}</h5>
+                    </div>
+
+                    <img src={`https://starwars-visualguide.com/assets/img/planets/${getId(planet.url)}.jpg`} className="card-img-top rounded mx-auto d-block display-image inside-borders-vehicle mt-3 mb-1" alt="..." />
+                    <p className="text-start text-black bg-secondary px-2 mx-0 mb-1 inside-borders-vehicle card-class"></p>
+                    <div className="card-text text-black card-body-font-size inside-borders-vehicle px-3 py-2">
+                        <dl className="row">
                             <dt className="col-sm-4 text-start">Population:</dt> <dd className="col-sm-8 text-start"> {planet.population}</dd>
                             <dt className="col-sm-4 text-start">Climate:</dt><dd className="col-sm-8 text-start"> {planet.climate}</dd>
                             <dt className="col-sm-4 text-start">Diameter:</dt> <dd className="col-sm-8 text-start"> {planet.diameter} km</dd>
                             <dt className="col-sm-4 text-start">Rotation:</dt> <dd className="col-sm-8 text-start"> {planet.rotation_period} days</dd>
-                            <dt className="col-sm-4 text-start">Traslation:</dt> <dd className="col-sm-8 text-start"> {planet.orbital_period} days</dd> 
+                            <dt className="col-sm-4 text-start">Traslation:</dt> <dd className="col-sm-8 text-start"> {planet.orbital_period} days</dd>
                         </dl>
-                        </div>
-                        <div className="d-flex my-1 flex-row justify-content-between align-items-center">
-                                <Link to="/details" >
-                                    <button onClick={() => actions.setDetails(planet.url)}>
-                                        More info
-                                    </button>
-                                </Link>
-                                <button onClick={() => actions.addToFavorites(planet.name, planet.url)} className="fav-btn mt-2"></button>
-                        </div>
+                    </div>
+                    <div className="d-flex my-1 flex-row justify-content-between align-items-center">
+                        <Link to="/details" >
+                            <button onClick={() => actions.setDetails(planet.url)}>
+                                More info
+                            </button>
+                        </Link>
+                        <button onClick={() => actions.addToFavorites(planet.name, planet.url)} className="fav-btn mt-2"></button>
                     </div>
                 </div>
+            </div>
         )
     })
 

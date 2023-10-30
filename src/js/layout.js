@@ -1,31 +1,36 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ScrollToTop from "./component/scrollToTop";
+import Home from "./views/home";
+import { Demo } from "./views/demo";
+import { Single } from "./views/single";
+import Characters from './views/characters';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/index.css';
-import Layout from './layout.js';
-import characters from './views/characters'; 
-import charactersDetails from './views/charactersDetails';
-import planets from './views/planets';
-import planetsDetails from './views/planetsDetails'; 
-import vehicles from './views/vehicles';
-import vehiclesDetails from './views/vehiclesDetails';
-const root = createRoot(document.querySelector('#app'));
-
-root.render(
-  <Router>
-    <Layout />
-    <Switch>
-      <Route exact path="/" component={characters} />
-      <Route path="/details/characters/:id" component={charactersDetails} />
-      <Route exact path="/" component={planets} />
-      <Route path="/details/planets/:id" component={planetsDetails} />
-      <Route exact path="/" component={vehicles} />
-      <Route path="/details/vehicles/:id" component={vehiclesDetails}/>
-    </Switch>
-  </Router>
-);
-
-
-
-
+import injectContext from "./store/appContext";
+import Navbar from "./component/navbar";
+import { Footer } from "./component/footer";
+//create your first component
+const Layout = () => {
+  //the basename is used when your project is published in a subdirectory and not in the root of the domain
+  // you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
+  const basename = process.env.BASENAME || "";
+  return (
+    <div>
+      <BrowserRouter basename={basename}>
+        <ScrollToTop>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/characters" element={<Characters />} />
+            <Route path="/demo" element={<Demo />} />
+            <Route path="/single/:theid" element={<Single />} />
+            <Route path="*" element={<h1>Not found!</h1>} />
+          </Routes>
+          <Footer />
+        </ScrollToTop>
+      </BrowserRouter>
+    </div>
+  );
+};
+export default injectContext(Layout);
