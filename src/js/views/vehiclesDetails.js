@@ -1,25 +1,34 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
 
 const VehiclesDetails = () => {
   const { store } = useContext(Context);
-  const { id } = useParams(); 
+  const { id } = useParams();
   const [vehicle, setVehicle] = useState(null);
   const [films, setFilms] = useState([]);
 
   useEffect(() => {
-   
-    const selectedVehicle = store.vehicles.find((v) => v.url.endsWith(`/${id}/`));
+    const fetchData = async () => {
+      try {
+        const selectedVehicle = store.vehicles.find((v) => v.url.endsWith(`/${id}/`));
+        if (!selectedVehicle) {
+          throw new Error("Vehicle not found");
+        }
 
-    if (selectedVehicle) {
-      
-      setVehicle(selectedVehicle);
+        setVehicle(selectedVehicle);
 
-      
-      Promise.all(selectedVehicle.films.map((filmUrl) => fetch(filmUrl).then((response) => response.json()))
-      ).then((filmData) => setFilms(filmData));
-    }
+        const filmResponses = await Promise.all(
+          selectedVehicle.films.map((filmUrl) => fetch(filmUrl).then((response) => response.json()))
+        );
+
+        setFilms(filmResponses);
+      } catch (error) {
+        console.error("Error fetching vehicle details:", error);
+      }
+    };
+
+    fetchData();
   }, [store.vehicles, id]);
 
   if (!vehicle) {
@@ -46,3 +55,4 @@ const VehiclesDetails = () => {
 };
 
 export default VehiclesDetails;
+

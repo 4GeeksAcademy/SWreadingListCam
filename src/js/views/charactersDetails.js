@@ -1,34 +1,49 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
 
 const CharactersDetails = () => {
   const { store } = useContext(Context);
+  const { id } = useParams();
   const [films, setFilms] = useState([]);
   const [species, setSpecies] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-   
-    if (store.details.films) {
-      Promise.all(
-        store.details.films.map((filmUrl) =>
-          fetch(filmUrl).then((response) => response.json())
-        )
-      ).then((filmData) => setFilms(filmData));
-    }
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${store.apiURL}/people/${id}/`);
+        const characterData = await response.json();
 
-  
-    if (store.details.species) {
-      Promise.all(
-        store.details.species.map((speciesUrl) =>
-          fetch(speciesUrl).then((response) => response.json())
-        )
-      ).then((speciesData) => setSpecies(speciesData));
-    }
-  }, [store.details]);
+        Promise.all(
+          characterData.films.map((filmUrl) =>
+            fetch(filmUrl).then((response) => response.json())
+          )
+        ).then((filmData) => setFilms(filmData));
+
+        Promise.all(
+          characterData.species.map((speciesUrl) =>
+            fetch(speciesUrl).then((response) => response.json())
+          )
+        ).then((speciesData) => setSpecies(speciesData));
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching character details:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [store.apiURL, id]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div className="container">
-      <h1>{store.details.name}</h1>
+      <h1>{id}</h1>
       <p>Height: {store.details.height} cm</p>
       <p>Hair color: {store.details.hair_color}</p>
       <p>Eye color: {store.details.eye_color}</p>
@@ -51,4 +66,3 @@ const CharactersDetails = () => {
 };
 
 export default CharactersDetails;
-

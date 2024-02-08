@@ -4,17 +4,36 @@ import { Context } from "../store/appContext";
 const PlanetsDetails = () => {
   const { store } = useContext(Context);
   const [residents, setResidents] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch residents
+  
     if (store.details.residents) {
       Promise.all(
         store.details.residents.map((residentUrl) =>
-          fetch(residentUrl).then((response) => response.json())
+          fetch(residentUrl)
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .catch((error) => {
+              setError(error.message);
+              return null;
+            })
         )
-      ).then((residentData) => setResidents(residentData));
+      ).then((residentData) => {
+      
+        const validResidents = residentData.filter((resident) => resident !== null);
+        setResidents(validResidents);
+      });
     }
   }, [store.details]);
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="container">

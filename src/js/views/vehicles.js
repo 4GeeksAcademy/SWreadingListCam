@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"; 
 import { Context } from "../store/appContext";
 
 const Vehicles = () => {
@@ -35,8 +35,9 @@ const Vehicles = () => {
             </dl>
           </div>
           <div className="d-flex my-1 flex-row justify-content-between align-items-center">
-            <Link to="/details">
-              <button onClick={() => actions.setDetails(vehicle.url)}>More info</button>
+            {/* Use Link component to navigate to vehicle details */}
+            <Link to={`/vehicles/${vehicle.id}`}> 
+              <button>More info</button>
             </Link>
             <button onClick={() => actions.addToFavorites(vehicle.name, vehicle.url)} className="fav-btn mt-2"></button>
           </div>

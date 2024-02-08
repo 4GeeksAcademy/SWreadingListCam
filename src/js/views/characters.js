@@ -25,7 +25,7 @@ const Characters = () => {
           </div>
 
           <div className="d-flex my-1 flex-row justify-content-between align-items-center">
-            <Link to="/details">
+            <Link to= {`/characters/${character.id}`}>
               <button onClick={() => actions.setDetails(character.url)}>
                 More info
               </button>

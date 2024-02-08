@@ -1,30 +1,30 @@
-import {Link} from 'react-router-dom'
-import React, {useContext} from 'react'
-import { Context } from "../store/appContext"
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { Context } from '../store/appContext';
 
 const Favorites = () => {
-    const {store, actions} = useContext(Context)
+    const { store, actions } = useContext(Context);
 
-    let favList = store.favorites.length > 0 && store.favorites.map((fav) => {
-        return <li key={fav.name} className="d-flex flex-row">
-                    <Link to="/details" >
-                        <button onClick={() => actions.setDetails(fav.url)}>
-                            {fav.name}
-                        </button>
-                    </Link>
-                    <button onClick={ () => actions.deleteFromFavorites(fav.name)} > x </button>
-               </li>
-        
-    })
+    let favList;
 
+    if (store.favorites.length > 0) {
+        favList = store.favorites.map(fav => (
+            <li key={fav.name} className="d-flex flex-row">
+                <Link to="/details">
+                    <button onClick={() => actions.setDetails(fav.url)}>{fav.name}</button>
+                </Link>
+                <button onClick={() => actions.deleteFromFavorites(fav.name)}>x</button>
+            </li>
+        ));
+    } else {
+        favList = <li>No favorites yet.</li>;
+    }
 
     return (
         <div className="container-fluid">
-            <ul>
-            {favList}
-            </ul>
+            <ul>{favList}</ul>
         </div>
-    )
-}
+    );
+};
 
-export default Favorites
+export default Favorites;
